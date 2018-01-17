@@ -82,7 +82,7 @@ function readFile()
   var content;
   try
   {
-      content = fs.readFileSync('./sensors', 'utf8')
+      content = fs.readFileSync('/var/log/sensors', 'utf8')
       obj = JSON.parse(content);
   } catch (err)
   {
