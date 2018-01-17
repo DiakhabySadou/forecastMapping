@@ -58,23 +58,23 @@ var rainFallFile = fs.readFileSync(rainFallPath);
 
 execute(sensorPath, "sensors");
 fs.watchFile(sensorPath, function() {
-    console.log('File Changed ...');
+    console.log('sensors File Changed ...');
     sensorFile = fs.readFileSync(sensorPath);
     execute(sensorPath, "sensors");
 });
 
 execute(gpsPath, "location");
 fs.watchFile(gpsPath, function() {
-    console.log('File Changed ...');
+    console.log('location File Changed ...');
     gpsFile = fs.readFileSync(gpsPath);
-    execute(gpsPath, "sensors");
+    execute(gpsPath, "location");
 });
 
 execute(rainFallPath, "rainfall");
 fs.watchFile(rainFallPath, function() {
-    console.log('File Changed ...');
+    console.log('rainfall File Changed ...');
     rainFallFile = fs.readFileSync(rainFallPath);
-    execute(rainFallPath, "sensors");
+    execute(rainFallPath, "rainfall");
 });
 
 
@@ -153,7 +153,6 @@ function readFile(fileToRead,dataType)
 
 function updateDataBase(obj,dataType)
 {
-  console.log('Writting '+dataType+' data...');
   switch (dataType) {
     case 'sensors':
         updateSensor(obj);
