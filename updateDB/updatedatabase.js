@@ -56,12 +56,26 @@ var sensorFile = fs.readFileSync(sensorPath);
 var gpsFile = fs.readFileSync(gpsPath);
 var rainFallFile = fs.readFileSync(rainFallPath);
 
+execute(sensorPath, "sensors");
 fs.watchFile(sensorPath, function() {
     console.log('File Changed ...');
     sensorFile = fs.readFileSync(sensorPath);
-    executeSensor();
+    execute(sensorPath, "sensors");
 });
 
+execute(gpsPath, "location");
+fs.watchFile(gpsPath, function() {
+    console.log('File Changed ...');
+    gpsFile = fs.readFileSync(gpsPath);
+    execute(gpsPath, "sensors");
+});
+
+execute(rainFallPath, "rainfall");
+fs.watchFile(rainFallPath, function() {
+    console.log('File Changed ...');
+    rainFallFile = fs.readFileSync(rainFallPath);
+    execute(rainFallPath, "sensors");
+});
 
 
 
@@ -88,7 +102,7 @@ function execute(fileToRead,dataType)
   .catch(err =>
      {
        console.error(`Error creating Influx database!${err.stack}`);
-     }
+     })
     var data = readFile(fileToRead,dataType);
     updateDataBase(data,dataType);
 }
@@ -100,7 +114,7 @@ function readFile(fileToRead,dataType)
   var content;
   try
   {
-<<<<<<< HEAD
+
       content = fs.readFileSync(fileToRead, 'utf8')
       if (dataType=="sensors")
       {
@@ -110,27 +124,25 @@ function readFile(fileToRead,dataType)
       {
           var ligne1_splite = content.split('\n')[0].split(',');
           var tabHoraire = ligne1_splite[1];
-          var hh = tabHoraire[0].subString(0,2);
-          var mm = tabHoraire[0].subString(2,4);
-          var ss = tabHoraire[0].subString(4,tabHoraire.length);
+
+          var hh = tabHoraire.substr(0,2);
+          var mm = tabHoraire.substr(2,2);
+          var ss = tabHoraire.substr(4,tabHoraire.length);
 
           var ligne2_splite = content.split('\n')[1].split(',');
           var date = ligne2_splite[ligne2_splite.length-3];
-          var yyyy = "20"+date.subString(4,6);
-          var mM = date.subString(2,4);
-          var dd = date.subString(0,2);
+          var yyyy = "20"+date.substr(4,2);
+          var mM = date.substr(2,2);
+          var dd = date.substr(0,2);
 
           var dateTo = new Date(yyyy+" "+mM+" "+dd+" "+hh+":"+mm+":"+ss)
+
           obj = {'date': dateTo.toISOString(), 'longitude':ligne1_splite[4], 'latitude':ligne1_splite[2]}
       }
       else {
         obj = {'date':content};
       }
 
-=======
-      content = fs.readFileSync('/var/log/sensors', 'utf8')
-      obj = JSON.parse(content);
->>>>>>> c863db9c4c8d11c490d36e9a0989c95f45116a9a
   } catch (err)
   {
     throw err;
