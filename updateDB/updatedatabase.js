@@ -1,10 +1,6 @@
 const Influx = require('influx')
-const express = require('express')
-const http = require('http')
 const os = require('os')
 const fs = require('fs')
-
-const app = express()
 
 const influx = new Influx.InfluxDB({
   host: 'localhost',
@@ -14,12 +10,11 @@ const influx = new Influx.InfluxDB({
           {
             measurement: 'sensors',
             fields: {
-              measurement: 'sensors',
               date: Influx.FieldType.STRING,
               temperature: Influx.FieldType.FLOAT,
               pressure: Influx.FieldType.FLOAT,
               humidity: Influx.FieldType.FLOAT,
-              luminosity: Influx.FieldType.FLOAT
+              luminosity: Influx.FieldType.FLOAT,
               wind_heading: Influx.FieldType.FLOAT,
               wind_speed_max: Influx.FieldType.FLOAT,
               wind_speed_min: Influx.FieldType.FLOAT,
@@ -32,39 +27,60 @@ const influx = new Influx.InfluxDB({
         ]
 })
 
-//Test Database existence
-influx.getDatabaseNames()
-.then(names =>
-  {
-    if (names.indexOf('forecast')==-1)
-      {
+var http = require('http').createServer((req, res) =>
+{
+  res.end("Updating dataBase programm");
+});
+
+http.listen(88);
+console.log('Server running at http://127.0.0.1:88/');
+
+execute();
+
+function execute()
+{
+  //Test Database existence
+  influx.getDatabaseNames()
+  .then(names =>
+    {
+      if (names.indexOf('forecast')==-1)
+        {
         return influx.createDatabase('forecast');
-      }
-    })
-.catch(err =>
-   {
-     console.error(`Error creating Influx database!${err.stack}`);
-   })
+        }
+      })
+  .catch(err =>
+     {
+       console.error(`Error creating Influx database!${err.stack}`);
+     })
 
-setInterval(function(){
-  var sensors = readFile();
-  updateDataBase(sensors);
-}, 1000)
-
+  setInterval(function(){
+    var sensors = readFile();
+    updateDataBase(sensors);
+  }, 500)
+}
 //Read Sensors File
 function readFile()
 {
-  var obj;
-  fs.readFile('./sensors', 'utf8', function (err, data) {
-  if (err) throw err;
-  obj = JSON.parse(data);
+  var obj=null;
+  var content;
+  try
+  {
+      content = fs.readFileSync('./sensors', 'utf8')
+      obj = JSON.parse(content);
+  } catch (err)
+  {
+    throw err;
+  }
+
   return obj;
 }
 
 function updateDataBase(obj)
 {
+  console.log('Writting data...');
   influx.writePoints([
   {
+    measurement: 'sensors',
     tags: { host: os.hostname() },
     fields:
     {
