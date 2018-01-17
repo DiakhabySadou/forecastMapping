@@ -67,14 +67,14 @@ execute(gpsPath, "location");
 fs.watchFile(gpsPath, function() {
     console.log('File Changed ...');
     gpsFile = fs.readFileSync(gpsPath);
-    execute(gpsPath, "sensors");
+    execute(gpsPath, "location");
 });
 
 execute(rainFallPath, "rainfall");
 fs.watchFile(rainFallPath, function() {
     console.log('File Changed ...');
     rainFallFile = fs.readFileSync(rainFallPath);
-    execute(rainFallPath, "sensors");
+    execute(rainFallPath, "rainfall");
 });
 
 
