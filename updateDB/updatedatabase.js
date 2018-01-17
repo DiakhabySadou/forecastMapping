@@ -3,18 +3,6 @@ const os = require('os')
 const fs = require('fs')
 const path='./sensors'
 
-
-var filePath = '/var/log/sensors';
-var file = fs.readFileSync(filePath);
-console.log('Initial File content : ' + file);
-
-fs.watchFile(filePath, function() {
-    console.log('File Changed ...');
-    file = fs.readFileSync(filePath);
-    execute();
-});
-
-
 const influx = new Influx.InfluxDB({
   host: 'localhost',
   database: 'forecast',
@@ -36,9 +24,46 @@ const influx = new Influx.InfluxDB({
             tags: [
               'host'
             ]
+          },
+          {
+            measurement: 'location',
+            fields: {
+              date: Influx.FieldType.STRING,
+              longitude: Influx.FieldType.FLOAT,
+              latitude: Influx.FieldType.FLOAT
+            },
+            tags: [
+              'host'
+            ]
+          },
+          {
+            measurement: 'rainfall',
+            fields: {
+              date: Influx.FieldType.STRING,
+              },
+            tags: [
+              'host'
+            ]
           }
         ]
 })
+
+var sensorPath = '/dev/shm/sensors';
+var gpsPath = '/dev/shm/gpsNmea';
+var rainFallPath = '/dev/shm/rainCounter.log';
+
+var sensorFile = fs.readFileSync(sensorPath);
+var gpsFile = fs.readFileSync(gpsPath);
+var rainFallFile = fs.readFileSync(rainFallPath);
+
+fs.watchFile(sensorPath, function() {
+    console.log('File Changed ...');
+    sensorFile = fs.readFileSync(sensorPath);
+    executeSensor();
+});
+
+
+
 
 var http = require('http').createServer((req, res) =>
 {
@@ -46,16 +71,10 @@ var http = require('http').createServer((req, res) =>
 });
 
 http.listen(3600);
-console.log('Server running at http://127.0.0.1:88/');
+console.log('Server running at http://127.0.0.1:3600/');
 
 
-/******************** */
-
-
-
-/*********************** */
-
-function execute()
+function execute(fileToRead,dataType)
 {
   //Test Database existence
   influx.getDatabaseNames()
@@ -69,21 +88,44 @@ function execute()
   .catch(err =>
      {
        console.error(`Error creating Influx database!${err.stack}`);
-     })
-//  setInterval(function(){
-    var sensors = readFile();
-    updateDataBase(sensors);
- // }, 500)
+     }
+    var data = readFile(fileToRead,dataType);
+    updateDataBase(data,dataType);
 }
+
 //Read Sensors File
-function readFile()
+function readFile(fileToRead,dataType)
 {
   var obj=null;
   var content;
   try
   {
-      content = fs.readFileSync('./sensors', 'utf8')
-      obj = JSON.parse(content);
+      content = fs.readFileSync(fileToRead, 'utf8')
+      if (dataType=="sensors")
+      {
+        obj = JSON.parse(content);
+      }
+      else if (dataType=="location")
+      {
+          var ligne1_splite = content.split('\n')[0].split(',');
+          var tabHoraire = ligne1_splite[1];
+          var hh = tabHoraire[0].subString(0,2);
+          var mm = tabHoraire[0].subString(2,4);
+          var ss = tabHoraire[0].subString(4,tabHoraire.length);
+
+          var ligne2_splite = content.split('\n')[1].split(',');
+          var date = ligne2_splite[ligne2_splite.length-3];
+          var yyyy = "20"+date.subString(4,6);
+          var mM = date.subString(2,4);
+          var dd = date.subString(0,2);
+
+          var dateTo = new Date(yyyy+" "+mM+" "+dd+" "+hh+":"+mm+":"+ss)
+          obj = {'date': dateTo.toISOString(), 'longitude':ligne1_splite[4], 'latitude':ligne1_splite[2]}
+      }
+      else {
+        obj = {'date':content};
+      }
+
   } catch (err)
   {
     throw err;
@@ -92,9 +134,29 @@ function readFile()
   return obj;
 }
 
-function updateDataBase(obj)
+function updateDataBase(obj,dataType)
 {
-  console.log('Writting data...');
+  console.log('Writting '+dataType+' data...');
+  switch (dataType) {
+    case 'sensors':
+        updateSensor(obj);
+      break;
+
+    case 'location':
+        updateGPS(obj);
+      break;
+    case 'rainfall':
+        updateRainFall(obj);
+      break;
+    default:
+        console.log("!!!! Unknown file......");
+  }
+
+}
+
+function updateSensor(obj)
+{
+
   influx.writePoints([
   {
     measurement: 'sensors',
@@ -111,6 +173,47 @@ function updateDataBase(obj)
       wind_speed_min:obj.measure[6].value,
       wind_speed_avg:obj.measure[7].value
      },
+    }],
+  {
+    database: 'forecast'
+  })
+  .catch(err => {
+    console.error(`Error saving data to InfluxDB! ${err.stack}`)
+  })
+}
+
+function updateGPS(obj)
+{
+  console.log('Writting GPS data...');
+  influx.writePoints([
+  {
+    measurement: 'location',
+    tags: { host: os.hostname() },
+    fields:
+    {
+      date:obj.date,
+      longitude:obj.longitude,
+      latitude: obj.latitude,
+     },
+    }],
+  {
+    database: 'forecast'
+  })
+  .catch(err => {
+    console.error(`Error saving data to InfluxDB! ${err.stack}`)
+  })
+}
+
+function updateRainFall(obj)
+{
+  influx.writePoints([
+  {
+    measurement: 'rainfall',
+    tags: { host: os.hostname() },
+    fields:
+    {
+      date:obj.date,
+      },
     }],
   {
     database: 'forecast'
