@@ -100,6 +100,7 @@ function readFile(fileToRead,dataType)
   var content;
   try
   {
+<<<<<<< HEAD
       content = fs.readFileSync(fileToRead, 'utf8')
       if (dataType=="sensors")
       {
@@ -126,6 +127,10 @@ function readFile(fileToRead,dataType)
         obj = {'date':content};
       }
 
+=======
+      content = fs.readFileSync('/var/log/sensors', 'utf8')
+      obj = JSON.parse(content);
+>>>>>>> c863db9c4c8d11c490d36e9a0989c95f45116a9a
   } catch (err)
   {
     throw err;
