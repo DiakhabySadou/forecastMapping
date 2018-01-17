@@ -1,6 +1,19 @@
 const Influx = require('influx')
 const os = require('os')
 const fs = require('fs')
+const path='./sensors'
+
+
+var filePath = '/var/log/sensors';
+var file = fs.readFileSync(filePath);
+console.log('Initial File content : ' + file);
+
+fs.watchFile(filePath, function() {
+    console.log('File Changed ...');
+    file = fs.readFileSync(filePath);
+    execute();
+});
+
 
 const influx = new Influx.InfluxDB({
   host: 'localhost',
@@ -32,10 +45,15 @@ var http = require('http').createServer((req, res) =>
   res.end("Updating dataBase programm");
 });
 
-http.listen(88);
+http.listen(3600);
 console.log('Server running at http://127.0.0.1:88/');
 
-execute();
+
+/******************** */
+
+
+
+/*********************** */
 
 function execute()
 {
@@ -52,11 +70,10 @@ function execute()
      {
        console.error(`Error creating Influx database!${err.stack}`);
      })
-
-  setInterval(function(){
+//  setInterval(function(){
     var sensors = readFile();
     updateDataBase(sensors);
-  }, 500)
+ // }, 500)
 }
 //Read Sensors File
 function readFile()
