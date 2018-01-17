@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var influx = require('influx')
 
 var app = express();
 
@@ -44,15 +45,5 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-var fs = require('fs');
-var obj;
-fs.readFile('./sensors', 'utf8', function (err, data) {
-if (err) throw err;
-obj = JSON.parse(data);
-console.log(obj.measure[0].name);
-for (var i=0;i<obj.measure.length;i++) {
-  console.log(obj.measure[i].name);
-  }
 
-})
 module.exports = app;
