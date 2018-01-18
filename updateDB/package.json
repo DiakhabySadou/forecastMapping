@@ -4,10 +4,11 @@
   "description": "",
   "main": "updatedatabase.js",
   "dependencies": {
-    "influx": "^5.0.7"
+    "influx": "^5.0.7",
   },
   "devDependencies": {},
   "scripts": {
+    "debug": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

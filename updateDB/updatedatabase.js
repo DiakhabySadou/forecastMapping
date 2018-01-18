@@ -219,6 +219,7 @@ function updateGPS(obj)
 
 function updateRainFall(obj)
 {
+  var timestamp = new Date(obj.date)
   influx.writePoints([
   {
     measurement: 'rainfall',
@@ -227,6 +228,7 @@ function updateRainFall(obj)
     {
       date:obj.date,
       },
+      timestamp.getTime();
     }],
   {
     database: 'forecast'
