@@ -8,7 +8,7 @@ const influx = new Influx.InfluxDB({
   schema:
         [
           {
-            measurement: 'sensors',
+            measurement: 'measures',
             fields: {
               date: Influx.FieldType.STRING,
               temperature: Influx.FieldType.FLOAT,
@@ -175,7 +175,7 @@ function updateSensor(obj)
  var date = timestamp.getTime()*1000;
   influx.writePoints([
   {
-    measurement: 'sensors',
+    measurement: 'measures',
     tags: { host: os.hostname() },
     fields:
     {
@@ -233,7 +233,7 @@ function updateRainFall(obj)
     tags: { host: os.hostname() },
     fields:
     {
-      date:date,
+      date:timestamp,
       },
       date
     }],
