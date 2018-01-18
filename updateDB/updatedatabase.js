@@ -1,7 +1,6 @@
 const Influx = require('influx')
 const os = require('os')
 const fs = require('fs')
-const path='./sensors'
 
 const influx = new Influx.InfluxDB({
   host: 'localhost',
@@ -48,6 +47,14 @@ const influx = new Influx.InfluxDB({
         ]
 })
 
+var http = require('http').createServer((req, res) =>
+{
+  res.end("Updating dataBase programm");
+});
+
+http.listen(3600);
+console.log('Server running at http://127.0.0.1:3600/');
+
 var sensorPath = '/dev/shm/sensors';
 var gpsPath = '/dev/shm/gpsNmea';
 var rainFallPath = '/dev/shm/rainCounter.log';
@@ -57,36 +64,28 @@ var gpsFile = fs.readFileSync(gpsPath);
 var rainFallFile = fs.readFileSync(rainFallPath);
 
 execute(sensorPath, "sensors");
+execute(gpsPath, "location");
+execute(rainFallPath, "rainfall");
+
+
 fs.watchFile(sensorPath, function() {
     console.log('sensors File Changed ...');
     sensorFile = fs.readFileSync(sensorPath);
     execute(sensorPath, "sensors");
 });
 
-execute(gpsPath, "location");
+
 fs.watchFile(gpsPath, function() {
     console.log('location File Changed ...');
     gpsFile = fs.readFileSync(gpsPath);
     execute(gpsPath, "location");
 });
 
-execute(rainFallPath, "rainfall");
 fs.watchFile(rainFallPath, function() {
     console.log('rainfall File Changed ...');
     rainFallFile = fs.readFileSync(rainFallPath);
     execute(rainFallPath, "rainfall");
 });
-
-
-
-var http = require('http').createServer((req, res) =>
-{
-  res.end("Updating dataBase programm");
-});
-
-http.listen(3600);
-console.log('Server running at http://127.0.0.1:3600/');
-
 
 function execute(fileToRead,dataType)
 {
@@ -114,7 +113,6 @@ function readFile(fileToRead,dataType)
   var content;
   try
   {
-
       content = fs.readFileSync(fileToRead, 'utf8')
       if (dataType=="sensors")
       {
@@ -138,11 +136,11 @@ function readFile(fileToRead,dataType)
           var dateTo = new Date(yyyy+" "+mM+" "+dd+" "+hh+":"+mm+":"+ss)
 
           obj = {'date': dateTo.toISOString(), 'longitude':ligne1_splite[4], 'latitude':ligne1_splite[2]}
+
       }
       else {
-        obj = {'date':content};
+        obj = {'date':content.substr(0,content.length-2)};
       }
-
   } catch (err)
   {
     throw err;
@@ -153,6 +151,7 @@ function readFile(fileToRead,dataType)
 
 function updateDataBase(obj,dataType)
 {
+  console.log("Writting "+dataType+" data.....");
   switch (dataType) {
     case 'sensors':
         updateSensor(obj);
@@ -172,7 +171,6 @@ function updateDataBase(obj,dataType)
 
 function updateSensor(obj)
 {
-
   influx.writePoints([
   {
     measurement: 'sensors',
@@ -200,7 +198,6 @@ function updateSensor(obj)
 
 function updateGPS(obj)
 {
-  console.log('Writting GPS data...');
   influx.writePoints([
   {
     measurement: 'location',
