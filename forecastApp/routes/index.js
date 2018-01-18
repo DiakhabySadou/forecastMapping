@@ -13,7 +13,7 @@ router.get('/interval', function (req, res)
 {
   var start = req.query.start;
   var end = req.query.end;
-  influx.query("select * from measure where time>'"+start+"' and time< ''"+start+"'")
+  influx.query("select * from sensors where time>'"+start+"' and time< '"+end+"'")
   .then(rows =>
     {
       //just comment
