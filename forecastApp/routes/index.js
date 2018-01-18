@@ -34,7 +34,7 @@ function getDataByInterval(req,res)
     var tabPromise= [];
     tabPromise.push(influx.query("select * from location where time>'"+start+"' and time< '"+stop+"'"))
     tabPromise.push(influx.query("select * from rainfall where time>'"+start+"' and time< '"+stop+"'"))
-    tabPromise.push(influx.query("select * from sensors where time>'"+start+"' and time< '"+stop+"'"))
+    tabPromise.push(influx.query("select * from measures where time>'"+start+"' and time< '"+stop+"'"))
 
     Promise.all(tabPromise)
     .then(results=>{
