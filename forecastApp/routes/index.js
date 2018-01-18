@@ -8,69 +8,91 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.get('/last/:data', function (req, res)
+{
+  getLatestData(req,res);
+})
 
-router.get('/interval', function (req, res)
+router.get('/:data/interval', function (req, res)
+{
+  getDataByInterval(req,res);
+})
+
+function getDataByInterval(req,res)
 {
   var start = req.query.start;
-  var end = req.query.end;
-  influx.query("select * from sensors where time>'"+start+"' and time< '"+end+"'")
-  .then(rows =>
-    {
-      //just comment
-      clearObj(rows);
-      res.send(rows)})
-})
+  var stop= req.query.stop;
+  var data = req.params.data;
 
-router.get('/last/location', function (req, res)
+  if (start==null || stop== null || data == null)
+  {
+    res.send([]);
+  }
+
+  else if (data=="all")
+  {
+    var tabPromise= [];
+    tabPromise.push(influx.query("select * from location where time>'"+start+"' and time< '"+stop+"'"))
+    tabPromise.push(influx.query("select * from rainfall where time>'"+start+"' and time< '"+stop+"'"))
+    tabPromise.push(influx.query("select * from sensors where time>'"+start+"' and time< '"+stop+"'"))
+
+    Promise.all(tabPromise)
+    .then(results=>{
+        clearObj(results[0]);
+        clearObj(results[1]);
+        clearObj(results[2]);
+        result = {"location":results[0],"rainfall":results[1],"measurements":results[2]}
+        res.send(result)
+      })
+  }
+  else
+  {
+    influx.query("select * from "+data+" where time>'"+start+"' and time< '"+stop+"'")
+    .then(rows =>
+      {
+        clearObj(rows);
+        res.send(rows)})
+      }
+}
+
+
+function getLatestData(req,res)
 {
-  influx.query('select * from location GROUP BY * ORDER BY DESC LIMIT 1')
-  .then(rows =>
-    {
-      clearObj(rows);
-      res.send(rows)})
-})
+  var data = req.params.data;
+  if (data == "all")
+  {
+    var tabPromise= [];
+    tabPromise.push(influx.query('select * from location GROUP BY * ORDER BY DESC LIMIT 1'))
+    tabPromise.push(influx.query('select * from rainfall GROUP BY * ORDER BY DESC LIMIT 1'))
+    tabPromise.push(influx.query('select * from measures GROUP BY * ORDER BY DESC LIMIT 1'))
 
+    Promise.all(tabPromise)
+    .then(results=>{
+        clearObj(results[0]);
+        clearObj(results[1]);
+        clearObj(results[2]);
+        result = {"location":results[0],"rainfall":results[1],"measurements":results[2]}
+        res.send(result)
+      })
+  }
 
-router.get('/last/rainfall',function(req,res,next)
-{
-  influx.query('select * from rainfall GROUP BY * ORDER BY DESC LIMIT 1')
-  .then(rows =>
-    {
-      clearObj(rows);
-      res.send(rows);})
-})
-
-router.get('/last/measurements',function(req,res,next)
-{
-  influx.query('select * from sensors GROUP BY * ORDER BY DESC LIMIT 1')
-  .then(rows =>
-    {
-      clearObj(rows);
-      res.send(rows);
-    })
-})
-
-router.get('/last/all',function(req,res,next)
-{
-  var tabPromise= [];
-  tabPromise.push(influx.query('select date,longitude,latitude from location GROUP BY * ORDER BY DESC LIMIT 1'))
-  tabPromise.push(influx.query('select date from rainfall GROUP BY * ORDER BY DESC LIMIT 1'))
-  tabPromise.push(influx.query('select date,temperature,pressure,humidity,luminosity,wind_heading,wind_speed_max,wind_speed_min,wind_speed_avg from sensors GROUP BY * ORDER BY DESC LIMIT 1'))
-
-  Promise.all(tabPromise)
-  .then(results=>{
-      clearObj(results[0]);
-      clearObj(results[1]);
-      clearObj(results[2]);
-      result = {"location":results[0],"rainfall":results[1],"measurements":results[2]}
-      res.send(result)
-    })
-  })
+  else
+  {
+    influx.query("select * from "+ data+ " GROUP BY * ORDER BY DESC LIMIT 1")
+    .then(rows =>
+      {
+        clearObj(rows);
+        res.send(rows);})
+  }
+}
 
 //Fonction permettant de supprimer les colonnes time et host du resultat des requêtes
 function clearObj(rows)
 {
-  rows.forEach((row)=>{delete row.time;delete row.host})
+  rows.forEach((row)=>
+  {
+    row.date = row.time;delete row.time;delete row.host
+  })
 }
 
 module.exports = router;
