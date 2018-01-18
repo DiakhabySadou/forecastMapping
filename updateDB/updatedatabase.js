@@ -171,13 +171,15 @@ function updateDataBase(obj,dataType)
 
 function updateSensor(obj)
 {
+  var timestamp = new Date(obj.date);
+ var date = timestamp.getTime()*1000;
   influx.writePoints([
   {
     measurement: 'sensors',
     tags: { host: os.hostname() },
     fields:
     {
-      date:obj.date,
+      date:date,
       temperature:obj.measure[0].value,
       pressure: obj.measure[1].value,
       humidity:obj.measure[2].value,
@@ -187,6 +189,7 @@ function updateSensor(obj)
       wind_speed_min:obj.measure[6].value,
       wind_speed_avg:obj.measure[7].value
      },
+	date
     }],
   {
     database: 'forecast'
@@ -198,16 +201,19 @@ function updateSensor(obj)
 
 function updateGPS(obj)
 {
+ var timestamp = new Date(obj.date);
+ var date = timestamp.getTime()*1000;
   influx.writePoints([
   {
     measurement: 'location',
     tags: { host: os.hostname() },
     fields:
     {
-      date:obj.date,
+      date:date,
       longitude:obj.longitude,
       latitude: obj.latitude,
      },
+    date
     }],
   {
     database: 'forecast'
@@ -219,14 +225,17 @@ function updateGPS(obj)
 
 function updateRainFall(obj)
 {
+ var timestamp = new Date(obj.date);
+ var date = timestamp.getTime()*1000;
   influx.writePoints([
   {
     measurement: 'rainfall',
     tags: { host: os.hostname() },
     fields:
     {
-      date:obj.date,
+      date:date,
       },
+      date
     }],
   {
     database: 'forecast'
