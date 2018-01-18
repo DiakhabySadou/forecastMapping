@@ -1,0 +1,104 @@
+const Influx = require('influx')
+const os = require('os')
+const fs = require('fs')
+
+const influx = new Influx.InfluxDB({
+  host: 'localhost',
+  database: 'forecast',
+  schema:
+        [
+          {
+            measurement: 'sensors',
+            fields: {
+              date: Influx.FieldType.STRING,
+              temperature: Influx.FieldType.FLOAT,
+              pressure: Influx.FieldType.FLOAT,
+              humidity: Influx.FieldType.FLOAT,
+              luminosity: Influx.FieldType.FLOAT,
+              wind_heading: Influx.FieldType.FLOAT,
+              wind_speed_max: Influx.FieldType.FLOAT,
+              wind_speed_min: Influx.FieldType.FLOAT,
+              wind_speed_avg: Influx.FieldType.FLOAT
+            },
+            tags: [
+              'host'
+            ]
+          }
+        ]
+})
+
+var http = require('http').createServer((req, res) =>
+{
+  res.end("Updating dataBase programm");
+});
+
+http.listen(3600);
+console.log('Server running at http://127.0.0.1:3600/');
+
+execute();
+
+function execute()
+{
+  //Test Database existence
+  influx.getDatabaseNames()
+  .then(names =>
+    {
+      if (names.indexOf('forecast')==-1)
+        {
+        return influx.createDatabase('forecast');
+        }
+      })
+{"date":"2018-01-16T13:16:10.598Z","measure":[{"name":"temperature","desc":"Température","unit":"C","value":"10.00"},{"name":"pressure","desc":"Pression","unit":"hP","value":"995.03"},{"name":"humidity","desc":"Humidité","unit":"%","value":"50.0"},{"name":"luminosity","desc":"Luminosité","unit":"Lux","value":"49640"},{"name":"wind_heading","desc":"Direction du vent","unit":"°","value":"172.241006525600"},{"name":"wind_speed_avg","desc":"Force moyenne du vent","unit":"Kts","value":"41.4"},{"name":"wind_speed_max","desc":"Force maxi du vent","unit":"Kts","value":"55.3"},{"name":"wind_speed_min","desc":"Force moyenne du vent","unit":"Kts","value":"24.1"}]}  .catch(err =>
+     {
+       console.error(`Error creating Influx database!${err.stack}`);
+     })
+
+  setInterval(function(){
+    var sensors = readFile();
+    updateDataBase(sensors);
+  }, 500)
+}
+//Read Sensors File
+function readFile()
+{
+  var obj=null;
+  var content;
+  try
+  {
+      content = fs.readFileSync('/var/log/sensors', 'utf8')
+      obj = JSON.parse(content);
+  } catch (err)
+  {
+    throw err;
+  }
+
+  return obj;
+}
+
+function updateDataBase(obj)
+{
+  console.log('Writting data...');
+  influx.writePoints([
+  {
+    measurement: 'sensors',
+    tags: { host: os.hostname() },
+    fields:
+    {
+      date:obj.date,
+      temperature:obj.measure[0].value,
+      pressure: obj.measure[1].value,
+      humidity:obj.measure[2].value,
+      luminosity:obj.measure[3].value,
+      wind_heading:obj.measure[4].value,
+      wind_speed_max:obj.measure[5].value,
+      wind_speed_min:obj.measure[6].value,
+      wind_speed_avg:obj.measure[7].value
+     },
+    }],
+  {
+    database: 'forecast'
+  })
+  .catch(err => {
+    console.error(`Error saving data to InfluxDB! ${err.stack}`)
+  })
+}
