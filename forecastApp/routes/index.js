@@ -8,14 +8,20 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/last/:data', function (req, res)
+router.get('/:periode/:data', function (req, res)
 {
-  getLatestData(req,res);
-})
+  var periode = req.params.periode;
+  switch (periode) {
+    case "last":
+        getLatestData(req,res);
+      break;
+    case "interval":
+      getDataByInterval(req,res);
+      break;
+    default:
 
-router.get('/:data/interval', function (req, res)
-{
-  getDataByInterval(req,res);
+  }
+
 })
 
 function getDataByInterval(req,res)
