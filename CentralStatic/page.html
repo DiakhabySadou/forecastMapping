@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <title>Centrale</title>
+
+         <!-- Bootstrap CSS CDN -->
+         <link href="./css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+       
+        <!-- Our Custom CSS -->
+        <link rel="stylesheet" href="css/style.css">
+        
+
+    <!-- Custom styles for this template -->
+    <link href="./css/album.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="wrapper">
+            <!-- Sidebar Holder -->
+            <nav id="sidebar">
+                <div class="sidebar-header">
+                    <h3>Centrale Sidebar</h3>
+                </div>
+
+                <ul class="list-unstyled components">
+                    
+                    <li class="active">
+                        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Sondes</a>
+                        <ul class="collapse list-unstyled" id="homeSubmenu">
+                            <li><a href="#">Sonde 2</a></li>
+                            <li><a href="#">Sonde 3</a></li>
+                            <li><a href="#">Sonde 4</a></li>
+                            <li><a href="#">Sonde 5</a></li>
+                            <li><a href="#">Sonde 6</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">Historique</a>
+                        <ul class="collapse list-unstyled" id="pageSubmenu">
+                            <li><a href="#">1 semaine</a></li>
+                            <li><a href="#">1 mois</a></li>
+                            <li><a href="#">1 an</a></li>
+                        </ul>
+                    </li>
+                   
+                    <li>
+                        <a href="#">Contact</a>
+                    </li>
+                </ul>
+
+               
+            </nav>
+
+            <!-- Page Content Holder -->
+            <div id="content">
+
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+
+                        <div class="navbar-header">
+                            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                                <i class="glyphicon glyphicon-align-left"></i>
+                                <span>Menu</span>
+                            </button>
+                        </div>
+
+                       
+                    </div>
+                </nav>
+
+
+
+                <div class="container">
+
+                    <div class="row">
+                      <div class="card temperature" >
+                            <p >
+                              <span class="temp-value">20 °C</span>  
+                            </p>
+                        <img  alt="100%x280" style="height: 280px; width: 100%; display: block;text-align: center;overflow: hidden;background-color: aqua" src="./image/temperature.jpg" data-holder-rendered="true">          
+                      </div>
+                      <div class="card humidity">
+                          <p >
+                              <span class="temp-value">35.00 %HR</span>  
+                            </p>
+                        <img  alt="100%x280" style="height: 280px; width: 100%; display: block;" src="./image/hum.jpeg" data-holder-rendered="true">
+                        </div>
+                      <div class="card atmo" >
+                          <p >
+                              <span class="temp-value">1006.4hPa</span>  
+                            </p>
+                        <img  alt="100%x280" style="height: 280px; width: 100%; display: block;" src="./image/atmo.jpg" data-holder-rendered="true">
+                        </div>
+                        
+                      <div class="card pluie">
+                          <p >
+                              <span class="temp-value">5 mm/1h</span>  
+                            </p>
+                        <img  alt="100%x280" style="height: 280px; width: 100%; display: block;" src="./image/pluie.jpg" data-holder-rendered="true">
+                        </div>
+                      <div class="card lum">
+                          <p >
+                              <span class="temp-value">20000 lux</span>  
+                            </p>
+                        <img  alt="100%x280" style="height: 280px; width: 100%; display: block;" src="./image/lum.jpg" data-holder-rendered="true">
+                         </div>
+                      <div class="card vent">
+                          <p >
+                              <span class="temp-value">25 km/h</span>  
+                            </p>
+                        <img  alt="100%x280" style="height: 280px; width: 100%; display: block;" src="./image/vent.jpg" data-holder-rendered="true">
+                        </div>
+            
+                      
+            
+                  </div>
+                </div>
+
+
+                </div>
+        </div>
+
+
+
+
+
+        <!-- jQuery CDN -->
+         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+         <!-- Bootstrap Js CDN -->
+         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+         <script type="text/javascript">
+             $(document).ready(function () {
+                 $('#sidebarCollapse').on('click', function () {
+                     $('#sidebar').toggleClass('active');
+                 });
+             });
+         </script>
+    </body>
+</html>
