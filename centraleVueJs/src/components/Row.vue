@@ -6,6 +6,8 @@
  <Rain :rain="rain"></Rain>
  <Luminosity :luminosity="lum"></Luminosity>
  <Wind :wind="wind"></Wind>
+   {{fetchItems()}}
+
   </div>
 </template>
 <script>
@@ -28,19 +30,22 @@
        rain: 0,
        lum: 0 ,
        wind: 0,
+     
         
     }
    
    },
+     props:  ['url'] ,
     created: function()
         {
             this.fetchItems();
         },
  methods: {
+           
             fetchItems()
             {
-              let uri = 'http://localhost:3000/last/all';
-              this.axios.get(uri).then((response) => {
+             // initUri()
+              this.axios.get(this.url).then((response) => {
                   this.items = response.data;
                   this.temp=this.items.measurements[0].temperature;
                   this.hum=this.items.measurements[0].humidity;

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
- <Row/>
+ <Row  :url="url"/>
   </div>
 </template>
 <<script>
@@ -8,8 +8,15 @@
     
     export default {
   name: 'Container',
+    props:  ['url'],
   components: {
     Row
-  }
+  },
+   created: function()
+        {
+          console.log("sdfsdfsdf"+this.url);
+          
+        }
+
 }
 </script>
