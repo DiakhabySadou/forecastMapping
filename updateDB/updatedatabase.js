@@ -1,6 +1,7 @@
 const Influx = require('influx')
 const os = require('os')
 const fs = require('fs')
+const dms = require("dms-conversion");
 
 const influx = new Influx.InfluxDB({
   host: 'localhost',
@@ -135,7 +136,9 @@ function readFile(fileToRead,dataType)
 
           var dateTo = new Date(yyyy+" "+mM+" "+dd+" "+hh+":"+mm+":"+ss)
 
-          obj = {'date': dateTo.toISOString(), 'longitude':ligne1_splite[4], 'latitude':ligne1_splite[2]}
+          var convertedCoords = DMS2LatLong([ligne1_splite[4].substr(1,ligne1_splite[4].length-1),ligne1_splite[2]],[ligne1_splite[5],ligne1_splite[3]])
+
+          obj = {'date': dateTo.toISOString(), 'longitude':convertedCoords[1], 'latitude':convertedCoords[0]}
 
       }
       else {
@@ -147,6 +150,27 @@ function readFile(fileToRead,dataType)
   }
 
   return obj;
+}
+
+function DMS2LatLong(coord,direction)
+{
+  var dms = require("dms-conversion");
+  var dmsStrings = [];
+
+  for (var i = 0; i < coord.length; i++)
+  {
+    var dd = parseFloat(coord[i].substr(0,2));
+    var mm = parseFloat(coord[i].substr(2,2));
+    var ss = parseFloat(coord[i].substr(4,coord[i].length-4));
+
+    var res = dd+ mm/60 +ss/3600;
+    if (direction[i] == 'S' || direction[i] == 'W') {
+       res = res * -1;
+     }
+    dmsStrings.push(res)
+  }
+
+  return dmsStrings;
 }
 
 function updateDataBase(obj,dataType)
