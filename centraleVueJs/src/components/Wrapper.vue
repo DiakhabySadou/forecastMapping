@@ -54,7 +54,7 @@
           </div>
         
         <container :url="url" :hide="hide" />
-        <Historique :hideHist="hideHist" />
+        <Historique :url="url"   :hideHist="hideHist" />
      </div> 
   
 </template>

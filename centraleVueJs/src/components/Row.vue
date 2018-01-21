@@ -6,7 +6,7 @@
  <Rain :rain="rain"></Rain>
  <Luminosity :luminosity="lum"></Luminosity>
  <Wind :wind="wind"></Wind>
-   {{fetchItems()}}
+  
 
   </div>
 </template>
