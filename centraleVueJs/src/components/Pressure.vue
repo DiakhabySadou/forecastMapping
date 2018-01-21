@@ -4,7 +4,7 @@
      <p >
      <span class="temp-value">{{pressure}}<span>hPa</span></span>  
      </p>
-     <img  alt="100%x280" style="height: 280px; width: 100%; display: block;" src="../assets/image/atmo.jpg" data-holder-rendered="true">
+     <img  alt="100%x280" class="imgStyle" src="../assets/image/atmo.jpg" data-holder-rendered="true">
  </div>
 </template>
 

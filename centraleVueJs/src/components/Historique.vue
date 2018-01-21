@@ -1,4 +1,5 @@
 <template>
+<div class="history"   v-if="!hideHist" >
   <svg version="1.2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="graph" aria-labelledby="title" role="img">
         <title id="title">A line chart showing some information</title>
       <g class="grid x-grid" id="xGrid">
@@ -23,11 +24,13 @@
         <text x="50" y="200" class="label-title">Price</text>
       </g>
       </svg>
+</div>
 </template>
 
 <script>
 export default {
     name: "Historique",
+      props:  ['hideHist'],
 
 }
 </script>

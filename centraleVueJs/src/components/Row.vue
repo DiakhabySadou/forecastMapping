@@ -51,7 +51,7 @@
                   this.hum=this.items.measurements[0].humidity;
                    this.lum=this.items.measurements[0].luminosity;
                     this.pre=this.items.measurements[0].pressure;
-                     this.wind=this.items.measurements[0].wind_speed_avg;
+                     this.wind=(this.items.measurements[0].wind_speed_avg).toFixed(2);
                      //rainfall
                 
               });
