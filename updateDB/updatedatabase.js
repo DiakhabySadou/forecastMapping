@@ -8,7 +8,7 @@ const influx = new Influx.InfluxDB({
   schema:
         [
           {
-            measurement: 'measures',
+            measurement: 'measurements',
             fields: {
               date: Influx.FieldType.STRING,
               temperature: Influx.FieldType.FLOAT,
@@ -175,7 +175,7 @@ function updateSensor(obj)
  var date = timestamp.getTime()*1000;
   influx.writePoints([
   {
-    measurement: 'measures',
+    measurement: 'measurements',
     tags: { host: os.hostname() },
     fields:
     {
@@ -243,4 +243,13 @@ function updateRainFall(obj)
   .catch(err => {
     console.error(`Error saving data to InfluxDB! ${err.stack}`)
   })
+}
+
+function ConvertDMSToDD(degrees, minutes, seconds, direction) {
+    var dd = degrees + minutes/60 + seconds/(60*60);
+
+    if (direction == "S" || direction == "W") {
+        dd = dd * -1;
+    } // Don't do anything for N or E
+    return dd;
 }
