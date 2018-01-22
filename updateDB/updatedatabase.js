@@ -1,7 +1,7 @@
 const Influx = require('influx')
 const os = require('os')
 const fs = require('fs')
-const dms = require("dms-conversion");
+
 
 const influx = new Influx.InfluxDB({
   host: 'localhost',
@@ -138,7 +138,7 @@ function readFile(fileToRead,dataType)
 
           var convertedCoords = DMS2LatLong([ligne1_splite[4].substr(1,ligne1_splite[4].length-1),ligne1_splite[2]],[ligne1_splite[5],ligne1_splite[3]])
 
-          obj = {'date': dateTo.toISOString(), 'longitude':convertedCoords[1], 'latitude':convertedCoords[0]}
+          obj = {'date': dateTo.toISOString(), 'longitude':convertedCoords[0], 'latitude':convertedCoords[1]}
 
       }
       else {
@@ -267,4 +267,13 @@ function updateRainFall(obj)
   .catch(err => {
     console.error(`Error saving data to InfluxDB! ${err.stack}`)
   })
+}
+
+function ConvertDMSToDD(degrees, minutes, seconds, direction) {
+    var dd = degrees + minutes/60 + seconds/(60*60);
+
+    if (direction == "S" || direction == "W") {
+        dd = dd * -1;
+    } // Don't do anything for N or E
+    return dd;
 }

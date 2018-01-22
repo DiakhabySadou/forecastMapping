@@ -9,18 +9,24 @@ router.all('*', function(req, res, next) {
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   next();
 });
-/*
-router.all('/', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
- });
- */
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
+
+router.get('/last', function (req, res)
+{
+    getLatestData(req,res);
+  })
+
+  router.get('/interval', function (req, res)
+  {
+    console.log(req.query.stop);
+    console.log("on est passe iici");
+      getDataByInterval(req,res);
+    })
 
 router.get('/:periode/:data', function (req, res)
 {
@@ -44,12 +50,12 @@ function getDataByInterval(req,res)
   var stop= req.query.stop;
   var data = req.params.data;
 
-  if (start==null || stop== null || data == null)
+  if (start==null || stop== null)
   {
-    res.send([]);
+    res.send("here we are");
   }
 
-  else if (data=="all")
+  else if (data=="all" || data == null)
   {
     var tabPromise= [];
     tabPromise.push(influx.query("select * from location where time>'"+start+"' and time< '"+stop+"'"))
@@ -67,6 +73,10 @@ function getDataByInterval(req,res)
   }
   else
   {
+    if (data == "measurements") {
+      data = "measures";
+    }
+    console.log(data);
     influx.query("select * from "+data+" where time>'"+start+"' and time< '"+stop+"'")
     .then(rows =>
       {
@@ -79,7 +89,7 @@ function getDataByInterval(req,res)
 function getLatestData(req,res)
 {
   var data = req.params.data;
-  if (data == "all")
+  if (data == "all" || data ==null)
   {
     var tabPromise= [];
     tabPromise.push(influx.query('select * from location GROUP BY * ORDER BY DESC LIMIT 1'))
@@ -98,6 +108,9 @@ function getLatestData(req,res)
 
   else
   {
+    if (data == "measurements") {
+      data = "measures";
+    }
     influx.query("select * from "+ data+ " GROUP BY * ORDER BY DESC LIMIT 1")
     .then(rows =>
       {

@@ -1,6 +1,9 @@
 <template>
 <div class="history"  v-if="!hideHist" >
-<Chart></Chart>
+
+<Chart  :url="url" :datas="datas" ></Chart>
+{{fetchItems()}}
+
 </div>
 </template>
 
@@ -13,18 +16,17 @@ export default {
       props:  ['hideHist','url'],
       data:  function() {
     return {
-    
-    items: [],
-       temp: 0,
-       hum: 0,
-       pre: 0,
-       rain: 0,
-       lum: 0 ,
-       wind: 0,
-     
-        
+
+    datas : {
+         'date':[],
+         'temperature':[],
+         'pressure':[],
+         'humidity':[]
+       }
+
+
     }
-   
+
    },
     components: {
     Chart
@@ -32,23 +34,28 @@ export default {
     created: function()
         {
             this.fetchItems();
-            
+
         },
       methods: {
-            
-            
+
+
             fetchItems()
             {
-             // initUri()
-              this.axios.get(this.url).then((response) => {
-                  this.items = response.data;
-                  this.temp=this.items.measurements[0].temperature;
-                  this.hum=this.items.measurements[0].humidity;
-                   this.lum=this.items.measurements[0].luminosity;
-                    this.pre=this.items.measurements[0].pressure;
-                     this.wind=(this.items.measurements[0].wind_speed_avg).toFixed(2);
-                     //rainfall
-                
+                // initUri()
+                var today = new Date();
+                var week = new Date();
+                week.setDate(today.getDate()-7);
+                var stop  = (week.toISOString()).split('T')[0];
+                var urlInterval = this.url+"/interval?start="+stop+"&stop="+today.toISOString();
+
+                this.axios.get(urlInterval).then((response) => {
+                for (var i = 0; i < response.data.measurements.length; i++)
+                  {
+                    this.datas.date.push((response.data.measurements[i].date).substr(0,10));
+                    this.datas.temperature.push(response.data.measurements[i].temperature);
+                    this.datas.humidity.push(response.data.measurements[i].humidity);
+                    this.datas.pressure.push(response.data.measurements[i].pressure);
+                  }
               });
             },
 },
@@ -90,6 +97,6 @@ export default {
 
 .data {
   fill: red;
-  stroke-width: 1; 
+  stroke-width: 1;
 }
 </style>
