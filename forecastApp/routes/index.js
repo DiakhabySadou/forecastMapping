@@ -21,6 +21,11 @@ router.get('/last', function (req, res)
     getLatestData(req,res);
   })
 
+  router.get('/interval', function (req, res)
+  {
+      getLatestData(req,res);
+    })
+
 router.get('/:periode/:data', function (req, res)
 {
   var periode = req.params.periode;
@@ -48,7 +53,7 @@ function getDataByInterval(req,res)
     res.send([]);
   }
 
-  else if (data=="all")
+  else if (data=="all" || data == null)
   {
     var tabPromise= [];
     tabPromise.push(influx.query("select * from location where time>'"+start+"' and time< '"+stop+"'"))
