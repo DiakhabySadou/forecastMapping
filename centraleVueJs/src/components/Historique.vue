@@ -1,6 +1,11 @@
 <template>
 <div class="history"  v-if="!hideHist" >
-<Chart></Chart>
+
+<div  class="card"><Chart  :url="url" :temperature="temperature"></Chart></div>
+<div  class="card"><Chart  :url="url"></Chart></div>
+<div  class="card"><Chart  :url="url"></Chart></div>
+<div  class="card"><Chart  :url="url"></Chart></div>
+
 </div>
 </template>
 
@@ -13,7 +18,7 @@ export default {
       props:  ['hideHist','url'],
       data:  function() {
     return {
-    
+
     items: [],
        temp: 0,
        hum: 0,
@@ -21,10 +26,12 @@ export default {
        rain: 0,
        lum: 0 ,
        wind: 0,
-     
-        
+       temperature:[],
+       pressure:[]
+
+
     }
-   
+
    },
     components: {
     Chart
@@ -32,23 +39,29 @@ export default {
     created: function()
         {
             this.fetchItems();
-            
+
         },
       methods: {
-            
-            
+
+
             fetchItems()
             {
-             // initUri()
-              this.axios.get(this.url).then((response) => {
-                  this.items = response.data;
-                  this.temp=this.items.measurements[0].temperature;
-                  this.hum=this.items.measurements[0].humidity;
-                   this.lum=this.items.measurements[0].luminosity;
-                    this.pre=this.items.measurements[0].pressure;
-                     this.wind=(this.items.measurements[0].wind_speed_avg).toFixed(2);
+                // initUri()
+                var today = new Date();
+                var week = new Date()
+                week.setDate(today.getDate()-7);
+                var stop  = (week.toISOString()).split('T')[0];
+                var urlInterval = this.url+"/interval?start="+today.toISOString()+"&stop="+stop;
+                console.log(urlInterval);
+                this.axios.get(this.url).then((response) => {
+                this.items = response.data;
+                this.temp=this.items.measurements[0].temperature;
+                this.hum=this.items.measurements[0].humidity;
+                this.lum=this.items.measurements[0].luminosity;
+                this.pre=this.items.measurements[0].pressure;
+                this.wind=(this.items.measurements[0].wind_speed_avg).toFixed(2);
                      //rainfall
-                
+
               });
             },
 },
@@ -90,6 +103,6 @@ export default {
 
 .data {
   fill: red;
-  stroke-width: 1; 
+  stroke-width: 1;
 }
 </style>

@@ -1,26 +1,24 @@
 <template>
-<canvas  id='myChart' v-chart>
+  <div class="">
+    <canvas  id='myChart' width="500px" v-chart ></canvas>
+  </div>
 
-</canvas>
+
+
 </template>
 
 <script>
 
 export default {
   name: 'Chart',
-   
    created: function(){
-       
-       
-
    },
    directives: {
         chart: function(el,binding,vnode){
-            console.log(document.getElementById(""+vnode.elm.id))
-            var ctx = el.getContext('2d');
-                console.log(ctx);
-                
-         
+                var ctx = el.getContext('2d');
+              
+
+
                 var myChart = new Chart(ctx, {
              type: 'line',
              data: {
@@ -59,11 +57,8 @@ export default {
              }
          });
         }
-   },
-
-}
+   }}
 
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-

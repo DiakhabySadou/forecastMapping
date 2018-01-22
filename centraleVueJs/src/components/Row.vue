@@ -6,12 +6,10 @@
  <Rain :rain="rain"></Rain>
  <Luminosity :luminosity="lum"></Luminosity>
  <Wind :wind="wind"></Wind>
-  
-
-  </div>
+ </div>
 </template>
 <script>
-   
+
     import Temperature from '../components/Temperature'
     import Humidity from '../components/Humidity'
     import Luminosity from '../components/Luminosity'
@@ -22,7 +20,7 @@
   name: 'Row',
   data:  function() {
     return {
-    
+
     items: [],
        temp: 0,
        hum: 0,
@@ -30,10 +28,10 @@
        rain: 0,
        lum: 0 ,
        wind: 0,
-     
-        
+
+
     }
-   
+
    },
      props:  ['url'] ,
     created: function()
@@ -41,7 +39,7 @@
             this.fetchItems();
         },
  methods: {
-           
+
             fetchItems()
             {
              // initUri()
@@ -53,7 +51,7 @@
                     this.pre=this.items.measurements[0].pressure;
                      this.wind=(this.items.measurements[0].wind_speed_avg).toFixed(2);
                      //rainfall
-                
+
               });
             },
 },
@@ -66,7 +64,6 @@
     Wind
   },
 
-  
+
 }
 </script>
-
