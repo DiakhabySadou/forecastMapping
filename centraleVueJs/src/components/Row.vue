@@ -6,7 +6,9 @@
  <Rain :rain="rain"></Rain>
  <Luminosity :luminosity="lum"></Luminosity>
  <Wind :wind="wind"></Wind>
- </div>
+
+{{fetchItems()}}
+  </div>
 </template>
 <script>
 
@@ -38,12 +40,14 @@
         {
             this.fetchItems();
         },
+
  methods: {
 
             fetchItems()
             {
              // initUri()
-              this.axios.get(this.url).then((response) => {
+             console.log("+++++++"+this.url)
+              this.axios.get(this.url+"/last").then((response) => {
                   this.items = response.data;
                   this.temp=this.items.measurements[0].temperature;
                   this.hum=this.items.measurements[0].humidity;
