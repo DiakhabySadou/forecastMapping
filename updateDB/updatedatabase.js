@@ -1,7 +1,7 @@
 const Influx = require('influx')
 const os = require('os')
 const fs = require('fs')
-const dms = require("dms-conversion");
+
 
 const influx = new Influx.InfluxDB({
   host: 'localhost',
@@ -9,7 +9,7 @@ const influx = new Influx.InfluxDB({
   schema:
         [
           {
-            measurement: 'measurements',
+            measurement: 'measures',
             fields: {
               date: Influx.FieldType.STRING,
               temperature: Influx.FieldType.FLOAT,
@@ -199,7 +199,7 @@ function updateSensor(obj)
  var date = timestamp.getTime()*1000;
   influx.writePoints([
   {
-    measurement: 'measurements',
+    measurement: 'measures',
     tags: { host: os.hostname() },
     fields:
     {
