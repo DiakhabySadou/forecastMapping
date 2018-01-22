@@ -8,7 +8,7 @@
 
                 <ul class="list-unstyled components">
                     
-                    <li class="active">
+                    <li class="active" v-on:click="switchContainer" >
                         <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Sondes</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
                             <li><a href="#" v-on:click="sonde2">Sonde 2</a></li>
@@ -52,10 +52,16 @@
                     </div>
                 </nav>
           </div>
+<<<<<<< HEAD
 
         <container :url="url" v-hide />
         <Historique  v-hide/>
 
+=======
+        
+        <container :url="url" :hide="hide" />
+        <Historique :url="url"   :hideHist="hideHist" />
+>>>>>>> 65eea39cab06016b16ac7911d2f508ad2bceeec7
      </div> 
   
 </template>
@@ -68,8 +74,16 @@ import Historique from '../components/Historique'
   data: function() {
   return {
     url: "http://localhost:3000/last/all",
-     week: false 
+     week_clicked: false,
+     container_clicked: true, 
+     hide: false,
+     hideHist: true,
+
  }
+  },
+  created: function(){
+     
+
   },
   methods: {
       sonde2: function(){
@@ -104,9 +118,17 @@ import Historique from '../components/Historique'
       
       },
       week_click: function(){
-          console.log(this.week);
-         this.week = true;
-           this.$emit("week_click", this.week)
+        this.hideHist= false; 
+        this.hide=true;
+        this.$emit("hide", this.hide)
+        this.$emit("hideHist", this.hideHist)
+        
+      },
+      switchContainer: function () {
+         this.hideHist=true;
+          this.hide=false;
+        this.$emit("hideHist", this.hide)
+        this.$emit("hide", this.hide)
       },
       updateUrl: function(){
     console.log(this.url)
@@ -117,20 +139,6 @@ import Historique from '../components/Historique'
     }
 
   },
-   directives: {
-        hide: function(el,binding,vnode){
-        console.log(el);
-        let isClick = vnode.tag==="vue-component-4-Historique" 
-        if(isClick){
-         //  el.style.display="none"
-            //this.week= false
-        }else{
-            // el.style.display= this.week? "none":"block"
-
-        }
-        
-     }
-   },
   
    components: {
        Container,
@@ -139,7 +147,12 @@ import Historique from '../components/Historique'
  
 }
 </script>
+<<<<<<< HEAD
 Fin de la discussion
 Écrivez un message...
 
 Sélect. fichiers
+=======
+<style >
+</style>
+>>>>>>> 65eea39cab06016b16ac7911d2f508ad2bceeec7
