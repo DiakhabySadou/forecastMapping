@@ -45,16 +45,16 @@
 
             fetchItems()
             {
-             // initUri()
-             console.log("+++++++"+this.url)
-              this.axios.get(this.url+"/last").then((response) => {
+                  // initUri()
+                  console.log("+++++++"+this.url)
+                  this.axios.get(this.url+"/last").then((response) => {
                   this.items = response.data;
                   this.temp=this.items.measurements[0].temperature;
                   this.hum=this.items.measurements[0].humidity;
-                   this.lum=this.items.measurements[0].luminosity;
-                    this.pre=this.items.measurements[0].pressure;
-                     this.wind=(this.items.measurements[0].wind_speed_avg).toFixed(2);
-                     //rainfall
+                  this.lum=this.items.measurements[0].luminosity;
+                  this.pre=this.items.measurements[0].pressure;
+                  this.wind=(this.items.measurements[0].wind_speed_avg).toFixed(2);
+                  //rainfall
 
               });
             },

@@ -1,10 +1,8 @@
 <template>
 <div class="history"  v-if="!hideHist" >
 
-<div  class="card"><Chart  :url="url" :temperature="temperature"></Chart></div>
-<div  class="card"><Chart  :url="url"></Chart></div>
-<div  class="card"><Chart  :url="url"></Chart></div>
-<div  class="card"><Chart  :url="url"></Chart></div>
+<Chart  :url="url" :datas="datas" ></Chart>
+{{fetchItems()}}
 
 </div>
 </template>
@@ -19,15 +17,12 @@ export default {
       data:  function() {
     return {
 
-    items: [],
-       temp: 0,
-       hum: 0,
-       pre: 0,
-       rain: 0,
-       lum: 0 ,
-       wind: 0,
-       temperature:[],
-       pressure:[]
+    datas : {
+         'date':[],
+         'temperature':[],
+         'pressure':[],
+         'humidity':[]
+       }
 
 
     }
@@ -48,20 +43,19 @@ export default {
             {
                 // initUri()
                 var today = new Date();
-                var week = new Date()
+                var week = new Date();
                 week.setDate(today.getDate()-7);
                 var stop  = (week.toISOString()).split('T')[0];
-                var urlInterval = this.url+"/interval?start="+today.toISOString()+"&stop="+stop;
-                console.log(urlInterval);
-                this.axios.get(this.url).then((response) => {
-                this.items = response.data;
-                this.temp=this.items.measurements[0].temperature;
-                this.hum=this.items.measurements[0].humidity;
-                this.lum=this.items.measurements[0].luminosity;
-                this.pre=this.items.measurements[0].pressure;
-                this.wind=(this.items.measurements[0].wind_speed_avg).toFixed(2);
-                     //rainfall
+                var urlInterval = this.url+"/interval?start="+stop+"&stop="+today.toISOString();
 
+                this.axios.get(urlInterval).then((response) => {
+                for (var i = 0; i < response.data.measurements.length; i++)
+                  {
+                    this.datas.date.push((response.data.measurements[i].date).substr(0,10));
+                    this.datas.temperature.push(response.data.measurements[i].temperature);
+                    this.datas.humidity.push(response.data.measurements[i].humidity);
+                    this.datas.pressure.push(response.data.measurements[i].pressure);
+                  }
               });
             },
 },

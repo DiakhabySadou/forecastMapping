@@ -1,15 +1,14 @@
 <template>
-  <div style="overflow-x:scroll">
-
-    <canvas  ref='temperature' class="col-xs-4 col-md-6" title="Température" width="500px"  ></canvas>
-
-    <canvas  ref='pressure' class="col-xs-4 col-md-6" title="Pression" width="500px" ></canvas>
-
-    <canvas  ref='myChart3' class="col-xs-4 col-md-6" title="hello" width="500px" ></canvas>
-    <canvas  ref='myChart4' class="col-xs-4 col-md-6" title="hello" width="500px" ></canvas>
-    <canvas  ref='myChart5' class="col-xs-4 col-md-6" width="500px" ></canvas>
-    <canvas  ref='myChart6' class="col-xs-4 col-md-6" width="500px" ></canvas>
+  <div class="">
+    <canvas  ref='temperature' width="500px"  ></canvas>
+    <canvas  id='pressure' width="500px" ></canvas>
+    <canvas  id='myChart3' width="500px" ></canvas>
+    <canvas  id='myChart4' width="500px" ></canvas>
+    <canvas  id='myChart5' width="500px" ></canvas>
+    <canvas  id='myChart6' width="500px" ></canvas>
   </div>
+
+
 
 </template>
 
@@ -22,23 +21,19 @@ export default {
    mounted : function()
    {
      var ctx = this.$refs.temperature.getContext('2d');
-     this.drawCanvas(ctx,this.datas.temperature,this.datas.date);
-
-     var ctxpressure = this.$refs.pressure.getContext('2d');
-
-     this.drawCanvas(ctxpressure,this.datas.pressure,this.datas.date);
+     this.drawCanvas(ctx);
    },
    methods:
    {
-     drawCanvas(ctx,dat,lab)
+     drawCanvas(ctx)
      {
        var myChart = new Chart(ctx, {
          type: 'line',
          data: {
-        labels: lab,
+        labels: this.datas.date,
         datasets: [{
             label: '# of Votes',
-            data: dat,
+            data: this.datas.temperature,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
