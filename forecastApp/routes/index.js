@@ -23,7 +23,7 @@ router.get('/last', function (req, res)
 
   router.get('/interval', function (req, res)
   {
-      getLatestData(req,res);
+      getDataByInterval(req,res);
     })
 
 router.get('/:periode/:data', function (req, res)
@@ -48,7 +48,7 @@ function getDataByInterval(req,res)
   var stop= req.query.stop;
   var data = req.params.data;
 
-  if (start==null || stop== null || data == null)
+  if (start==null || stop== null)
   {
     res.send([]);
   }
