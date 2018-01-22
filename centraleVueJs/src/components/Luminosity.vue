@@ -3,7 +3,7 @@
     <p >
       <span class="temp-value">{{luminosity}}<span>lux</span></span>  
      </p>
-     <img  alt="100%x280" class="imgStyle" src="../assets/image/lum.jpg" data-holder-rendered="true">
+     <img  alt="100%x280" style="height: 280px; width: 100%; display: block;" src="../assets/image/lum.jpg" data-holder-rendered="true">
  </div>
 </template>
 

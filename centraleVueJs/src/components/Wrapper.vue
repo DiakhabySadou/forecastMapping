@@ -11,6 +11,7 @@
                     <li class="active" v-on:click="switchContainer" >
                         <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Sondes</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
+                            <li><a href="#" v-on:click="sonde1">Sonde 1</a></li>
                             <li><a href="#" v-on:click="sonde2">Sonde 2</a></li>
                             <li><a href="#" v-on:click="sonde3">Sonde 3</a></li>
                             <li><a href="#" v-on:click="sonde4">Sonde 4</a></li>
@@ -66,7 +67,7 @@ import Historique from '../components/Historique'
 
   data: function() {
   return {
-    url: "http://localhost:3000/last/all",
+    url: "http://172.31.43.65:3000",
      week_clicked: false,
      container_clicked: true, 
      hide: false,
@@ -79,36 +80,29 @@ import Historique from '../components/Historique'
 
   },
   methods: {
+       sonde1: function(){
+
+          this.url="http://172.31.43.65:3000"
+      },
       sonde2: function(){
 
-          this.url="http://localhost:3000/last/all"
-          //console.log(this.url)
-          this.$emit("url", this.url)
-          
+          this.url="http://172.31.43.61:3000"
+   
       },
        sonde3: function(){
-          this.url="http://localhost:3003/last/all"
-         // console.log(this.url)
-          this.$emit("url", this.url)
-
+          this.url="http://172.31.43.60:3000"
       },
        sonde4: function(){
-          this.url="http://localhost:3004/last/all"
-         // console.log(this.url)
-          this.$emit("url", this.url)
+          this.url="http://localhost:3004"
 
       },
        sonde5: function(){
-          this.url="http://localhost:3005/last/all"
-         // console.log(this.url)
-          this.$emit("url", this.url)
-
+          this.url="http://localhost:3005"
+       
       },
        sonde6: function(){
-          this.url="http://localhost:3006/last/all"
-         // console.log(this.url)
-          this.$emit("url", this.url)
-      
+          this.url="http://localhost:3006"
+       
       },
       week_click: function(){
         this.hideHist= false; 

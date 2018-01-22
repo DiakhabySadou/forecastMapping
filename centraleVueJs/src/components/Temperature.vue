@@ -10,7 +10,17 @@
 <script>
 export default {
   name: 'Temperature',
-  props:  ['temperature']
+  props:  ['temperature'],
+  data: function(){
+      return {
+          src: "../assets/image/temperature.jpg",
+      }
+
+  },
+  created: function(){
+     
+      this.src = (this.temperature<10)?"../assets/image/image_bis/a.png" : "../assets/image/temperature.jpg"
+  }
   
 }
 </script>
