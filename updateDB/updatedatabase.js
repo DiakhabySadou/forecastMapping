@@ -138,7 +138,7 @@ function readFile(fileToRead,dataType)
 
           var convertedCoords = DMS2LatLong([ligne1_splite[4].substr(1,ligne1_splite[4].length-1),ligne1_splite[2]],[ligne1_splite[5],ligne1_splite[3]])
 
-          obj = {'date': dateTo.toISOString(), 'longitude':convertedCoords[1], 'latitude':convertedCoords[0]}
+          obj = {'date': dateTo.toISOString(), 'longitude':convertedCoords[0], 'latitude':convertedCoords[1]}
 
       }
       else {

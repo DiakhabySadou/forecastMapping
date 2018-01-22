@@ -23,6 +23,8 @@ router.get('/last', function (req, res)
 
   router.get('/interval', function (req, res)
   {
+    console.log(req.query.stop);
+    console.log("on est passe iici");
       getDataByInterval(req,res);
     })
 
@@ -50,7 +52,7 @@ function getDataByInterval(req,res)
 
   if (start==null || stop== null)
   {
-    res.send([]);
+    res.send("here we are");
   }
 
   else if (data=="all" || data == null)
