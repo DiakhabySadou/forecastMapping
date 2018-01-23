@@ -22,9 +22,9 @@
                     <li>
                         <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">Historique</a>
                         <ul class="collapse list-unstyled" id="pageSubmenu">
-                            <li><a  href="#" v-on:click="week_click">1 semaine</a></li>
-                            <li><a href="#">1 mois</a></li>
-                            <li><a href="#">1 an</a></li>
+                            <li><a  href="#" v-on:click="week_click" ref="week">1 semaine</a></li>
+                            <li><a href="#" v-on:click="month_click">1 mois</a></li>
+                            <li><a href="#" v-on:click="year_click">1 an</a></li>
                         </ul>
                     </li>
 
@@ -56,7 +56,7 @@
 
 
         <container :url="url" :hide="hide" />
-        <Historique :url="url"   :hideHist="hideHist" />
+        <Historique :url="url"   :hideHist="hideHist" :histo="histo" />
 
      </div>
 
@@ -69,11 +69,17 @@ import Historique from '../components/Historique'
 
   data: function() {
   return {
-    url: "http://localhost:3000",
+    url: "http://172.31.43.65:3000",
      week_clicked: false,
      container_clicked: true,
      hide: false,
      hideHist: true,
+     histo: {
+        week: false,
+        month:false,
+        year:false,
+     }
+     
 
  }
   },
@@ -106,12 +112,30 @@ import Historique from '../components/Historique'
           this.url="http://localhost:3006"
 
       },
-      week_click: function(){
+      week_click: function(){  
+        this.hideHist= false;
+        this.histo.week=true;
+        this.histo.year=false;
+        this.histo.month=false;
+        this.hide=true;
+
+
+        
+
+      },
+      month_click(){
         this.hideHist= false;
         this.hide=true;
-        this.$emit("hide", this.hide)
-        this.$emit("hideHist", this.hideHist)
-
+        this.histo.week=false;
+        this.histo.year=false;
+        this.histo.month=true;
+      },
+       year_click(){
+        this.hideHist= false;
+        this.hide=true;
+        this.histo.week=false;
+        this.histo.year=true;
+        this.histo.month=false;
       },
       switchContainer: function () {
          this.hideHist=true;

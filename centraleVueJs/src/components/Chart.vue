@@ -5,10 +5,11 @@
 
     <canvas  ref='pressure' class="col-xs-4 col-md-6" title="Pression" width="500px" ></canvas>
 
-    <canvas  ref='myChart3' class="col-xs-4 col-md-6" title="hello" width="500px" ></canvas>
-    <canvas  ref='myChart4' class="col-xs-4 col-md-6" title="hello" width="500px" ></canvas>
-    <canvas  ref='myChart5' class="col-xs-4 col-md-6" width="500px" ></canvas>
+    <canvas  ref='humidity' class="col-xs-4 col-md-6" title="humidité" width="500px" ></canvas>
+    <canvas  ref='luminosity' class="col-xs-4 col-md-6" title="luminosité" width="500px" ></canvas>
+    <canvas  ref='wind_speed_avg' class="col-xs-4 col-md-6" width="500px" ></canvas>
     <canvas  ref='myChart6' class="col-xs-4 col-md-6" width="500px" ></canvas>
+   {{datas}}
   </div>
 
 </template>
@@ -19,13 +20,25 @@ export default {
   name: 'Chart',
    props:['datas'],
 
-   mounted : function()
+   mounted : function()  
    {
      var ctx = this.$refs.temperature.getContext('2d');
      this.drawCanvas(ctx,this.groupByDate(this.datas.temperature)[0],this.groupByDate(this.datas.temperature)[1]);
 
      var ctxpressure = this.$refs.pressure.getContext('2d');
      this.drawCanvas(ctxpressure,this.groupByDate(this.datas.pressure)[0],this.groupByDate(this.datas.pressure)[1]);
+
+
+     var ctxhumidity = this.$refs.humidity.getContext('2d');
+     this.drawCanvas(ctxhumidity,this.groupByDate(this.datas.humidity)[0],this.groupByDate(this.datas.humidity)[1]);
+  
+     var ctxluminosity = this.$refs.luminosity.getContext('2d');
+     this.drawCanvas(ctxluminosity,this.groupByDate(this.datas.luminosity)[0],this.groupByDate(this.datas.luminosity)[1]);
+  
+     var ctxwind_speed_avg = this.$refs.wind_speed_avg.getContext('2d');
+     this.drawCanvas(ctxwind_speed_avg,this.groupByDate(this.datas.wind_speed_avg)[0],this.groupByDate(this.datas.wind_speed_avg)[1]);
+  
+   
    },
    methods:
    {
@@ -55,7 +68,8 @@ export default {
      },
      drawCanvas(ctx,lab,dat)
      {
-
+         console.log(lab);
+         
        var myChart = new Chart(ctx, {
          type: 'bar',
          data: {
