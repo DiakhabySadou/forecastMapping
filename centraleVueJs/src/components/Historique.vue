@@ -21,7 +21,8 @@ export default {
          'date':[],
          'temperature':[],
          'pressure':[],
-         'humidity':[]
+         'humidity':[],
+         'obj':[]
        }
 
 
@@ -51,11 +52,19 @@ export default {
                 this.axios.get(urlInterval).then((response) => {
                 for (var i = 0; i < response.data.measurements.length; i++)
                   {
+                    this.datas.temperature.push({'date':(response.data.measurements[i].date).substr(0,10),
+                      'value':response.data.measurements[i].temperature});
+
                     this.datas.date.push((response.data.measurements[i].date).substr(0,10));
-                    this.datas.temperature.push(response.data.measurements[i].temperature);
-                    this.datas.humidity.push(response.data.measurements[i].humidity);
-                    this.datas.pressure.push(response.data.measurements[i].pressure);
+
+                    this.datas.humidity.push({'date':(response.data.measurements[i].date).substr(0,10),
+                      'value':response.data.measurements[i].humidity});
+
+                    this.datas.pressure.push({'date':(response.data.measurements[i].date).substr(0,10),
+                      'value':response.data.measurements[i].pressure}
+                    );
                   }
+
               });
             },
 },

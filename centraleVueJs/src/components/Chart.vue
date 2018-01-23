@@ -1,5 +1,5 @@
 <template>
-  <div style="overflow-x:scroll">
+  <div>
 
     <canvas  ref='temperature' class="col-xs-4 col-md-6" title="Température" width="500px"  ></canvas>
 
@@ -22,18 +22,42 @@ export default {
    mounted : function()
    {
      var ctx = this.$refs.temperature.getContext('2d');
-     this.drawCanvas(ctx,this.datas.temperature,this.datas.date);
+     this.drawCanvas(ctx,this.groupByDate(this.datas.temperature)[0],this.groupByDate(this.datas.temperature)[1]);
 
      var ctxpressure = this.$refs.pressure.getContext('2d');
-
-     this.drawCanvas(ctxpressure,this.datas.pressure,this.datas.date);
+     this.drawCanvas(ctxpressure,this.groupByDate(this.datas.pressure)[0],this.groupByDate(this.datas.pressure)[1]);
    },
    methods:
    {
-     drawCanvas(ctx,dat,lab)
+     groupByDate(object)
      {
+       Array.prototype.groupBy = function(prop)
+       {
+       return this.reduce(function(groups, item) {
+         var val = item[prop];
+         groups[val] = groups[val] || [];
+         groups[val].push(item);
+         return groups;
+       }, {});}
+
+       var bydate = object.groupBy('date');
+       var values = [];
+       var labels =  Object.keys(bydate);
+       Object.keys(bydate).forEach(function(key,index) {
+  	      var moy =0;
+          for(var i= 0; i<Object.values(bydate)[index].length;i++)
+          {moy +=Object.values(bydate)[index][i].value};
+  	       moy=moy/Object.values(bydate)[index].length;
+           values.push(moy);
+  	        console.log(moy,Object.values(bydate)[index].length)
+          });
+      return [labels,values];
+     },
+     drawCanvas(ctx,lab,dat)
+     {
+
        var myChart = new Chart(ctx, {
-         type: 'line',
+         type: 'bar',
          data: {
         labels: lab,
         datasets: [{
@@ -62,7 +86,7 @@ export default {
         scales: {
             yAxes: [{
                 ticks: {
-                    beginAtZero:true
+                    beginAtZero:false
                 }
             }]
         },
