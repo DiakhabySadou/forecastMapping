@@ -1,7 +1,7 @@
 <template>
   <div class="row">
  <Temperature :temperature="temp"></Temperature>
- <Humidity :humidity="hum"></Humidity>
+ <Humidity :humidity="hum" ></Humidity>
  <Pressure :pressure="pre" > </Pressure>
  <Rain :rain="rain"></Rain>
  <Luminosity :luminosity="lum"></Luminosity>

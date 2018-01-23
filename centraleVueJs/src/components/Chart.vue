@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div v-if="datas">
 
-    <canvas  ref='temperature' class="col-xs-4 col-md-6" title="Température" width="500px"  ></canvas>
+    <canvas  ref='temperature' class="col-xs-4 col-md-6" title="Température" width="500px" height="200px" ></canvas>
 
     <canvas  ref='pressure' class="col-xs-4 col-md-6" title="Pression" width="500px" ></canvas>
 
@@ -9,7 +9,7 @@
     <canvas  ref='luminosity' class="col-xs-4 col-md-6" title="luminosité" width="500px" ></canvas>
     <canvas  ref='wind_speed_avg' class="col-xs-4 col-md-6" width="500px" ></canvas>
     <canvas  ref='myChart6' class="col-xs-4 col-md-6" width="500px" ></canvas>
-   {{datas}}
+   <p style="display:none">{{datas}}</p>
   </div>
 
 </template>
@@ -19,10 +19,18 @@
 export default {
   name: 'Chart',
    props:['datas'],
+   created: function(){
 
-   mounted : function()  
+       this.fetctItems();
+   },
+   updated : function()  
    {
+     
+
+     
      var ctx = this.$refs.temperature.getContext('2d');
+     ctx.clearRect(0,0,500,200);
+     
      this.drawCanvas(ctx,this.groupByDate(this.datas.temperature)[0],this.groupByDate(this.datas.temperature)[1]);
 
      var ctxpressure = this.$refs.pressure.getContext('2d');
@@ -42,6 +50,11 @@ export default {
    },
    methods:
    {
+     fetctItems()
+     {
+         console.log(this.datas);
+         
+     },
      groupByDate(object)
      {
        Array.prototype.groupBy = function(prop)

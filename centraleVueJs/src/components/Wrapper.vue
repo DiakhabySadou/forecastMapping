@@ -69,7 +69,7 @@ import Historique from '../components/Historique'
 
   data: function() {
   return {
-    url: "http://172.31.43.65:3000",
+    url: "http://172.31.43.60:3000",
      week_clicked: false,
      container_clicked: true,
      hide: false,
