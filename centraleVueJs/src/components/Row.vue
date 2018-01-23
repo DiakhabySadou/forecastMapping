@@ -1,12 +1,11 @@
 <template>
-  <div class="row">
+  <div class="row" style="width:80%">
  <Temperature :temperature="temp"></Temperature>
  <Humidity :humidity="hum" ></Humidity>
  <Pressure :pressure="pre" > </Pressure>
  <Rain :rain="rain"></Rain>
  <Luminosity :luminosity="lum"></Luminosity>
  <Wind :wind="wind"></Wind>
-
 {{fetchItems()}}
   </div>
 </template>
@@ -18,6 +17,7 @@
     import Pressure from '../components/Pressure'
     import Rain from '../components/Rain'
     import Wind from '../components/Wind'
+
     export default {
   name: 'Row',
   data:  function() {

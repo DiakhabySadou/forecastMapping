@@ -24,7 +24,7 @@ export default {
          'humidity':[],
          'wind_speed_avg':[],
          'luminosity':[]
-         
+
        }
 
 
@@ -56,7 +56,7 @@ export default {
                var today = new Date();
                 var month = new Date();
                 month.setDate(today.getDate()-30);
-console.log("hello on est dans mois");
+
                 this.getchart(today,month,7)
               }
               else if(this.histo.year) {
@@ -65,19 +65,19 @@ console.log("hello on est dans mois");
                 var year = new Date();
                 year.setDate(today.getDate()-365);
                 console.log("hello on est dans années");
-                
+
                this.getchart(today,year,4)
               }
-              
+
             },
             getchart(today,before,long){
             console.log(today+"   "+before);
-                
+
                 var stop  = (before.toISOString()).split('T')[0];
                 var urlInterval = this.url+"/interval?start="+stop+"&stop="+today.toISOString();
 
                 this.axios.get(urlInterval).then((response) => {
-                 
+
 
                  var temp = [];
                  var hum = [];

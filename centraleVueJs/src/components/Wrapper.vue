@@ -1,7 +1,7 @@
 <template>
-   <div class="wrapper">
+   <div class="wrapper col-md-12" >
             <!-- Sidebar Holder -->
-            <nav id="sidebar">
+            <nav id="sidebar" class="col-md-2">
                 <div class="sidebar-header">
                     <h3>Centrale Sidebar</h3>
                 </div>
@@ -37,7 +37,7 @@
             </nav>
 
             <!-- Page Content Holder -->
-            <div id="content">
+            <div id="content" class="col-md-1">
 
                 <nav class="navbar navbar-default">
                     <div class="container-fluid">
@@ -54,9 +54,12 @@
                 </nav>
           </div>
 
-
+      <div style="display:inline;" class="col-md-9">
         <container :url="url" :hide="hide" />
         <Historique :url="url"   :hideHist="hideHist" :histo="histo" />
+        <myMap :url="url"></myMap>
+
+      </div>
 
      </div>
 
@@ -64,6 +67,7 @@
 <script>
 import Container from '../components/Container'
 import Historique from '../components/Historique'
+import myMap from '../components/myMap'
     export default {
   name: 'Wrapper',
 
@@ -75,12 +79,13 @@ import Historique from '../components/Historique'
      hide: false,
      sonde:"sonde 1",
      hideHist: true,
+
      histo: {
         week: false,
         month:false,
         year:false,
      }
-     
+
 
  }
   },
@@ -96,7 +101,7 @@ import Historique from '../components/Historique'
       sonde2: function(){
            this.sonde="sonde 2"
 
-          this.url="http://172.31.43.60:3000"
+          this.url="http://172.31.43.58:3000"
 
       },
        sonde3: function(){
@@ -106,7 +111,7 @@ import Historique from '../components/Historique'
       },
        sonde4: function(){
                      this.sonde="sonde 4"
- 
+
           this.url="http://localhost:3004"
 
       },
@@ -122,7 +127,7 @@ import Historique from '../components/Historique'
           this.url="http://localhost:3006"
 
       },
-      week_click: function(){  
+      week_click: function(){
         this.hideHist= false;
         this.histo.week=true;
         this.histo.year=false;
@@ -130,7 +135,7 @@ import Historique from '../components/Historique'
         this.hide=true;
 
 
-        
+
 
       },
       month_click(){
@@ -165,7 +170,8 @@ import Historique from '../components/Historique'
 
    components: {
        Container,
-       Historique
+       Historique,
+       myMap
    }
 
 }
