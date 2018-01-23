@@ -29,7 +29,7 @@
                     </li>
 
                     <li>
-                        <a href="#">Contact</a>
+                        <a href="#">{{sonde}}</a>
                     </li>
                 </ul>
 
@@ -69,10 +69,11 @@ import Historique from '../components/Historique'
 
   data: function() {
   return {
-    url: "http://172.31.43.60:3000",
+    url: "http://172.31.43.65:3000",
      week_clicked: false,
      container_clicked: true,
      hide: false,
+     sonde:"sonde 1",
      hideHist: true,
      histo: {
         week: false,
@@ -89,26 +90,35 @@ import Historique from '../components/Historique'
   },
   methods: {
        sonde1: function(){
-
+           this.sonde="sonde 1"
           this.url="http://172.31.43.65:3000"
       },
       sonde2: function(){
+           this.sonde="sonde 2"
 
-          this.url="http://172.31.43.61:3000"
+          this.url="http://172.31.43.60:3000"
 
       },
        sonde3: function(){
-          this.url="http://172.31.43.60:3000"
+                      this.sonde="sonde 3"
+
+          this.url="http://172.31.43.61:3000"
       },
        sonde4: function(){
+                     this.sonde="sonde 4"
+ 
           this.url="http://localhost:3004"
 
       },
        sonde5: function(){
+                      this.sonde="sonde 5"
+
           this.url="http://localhost:3005"
 
       },
        sonde6: function(){
+                      this.sonde="sonde 6"
+
           this.url="http://localhost:3006"
 
       },
