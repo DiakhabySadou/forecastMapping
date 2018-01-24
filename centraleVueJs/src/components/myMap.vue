@@ -40,8 +40,8 @@ methods: {
         {
               // initUri()
               this.axios.get(this.url+"/last/location").then((response) => {
-              L.marker([response.data[0].longitude, response.data[0].latitude]).addTo(this.markers);
-              this.mymap.setView([response.data[0].longitude, response.data[0].latitude])
+              L.marker([response.data[0].latitude, response.data[0].longitude]).addTo(this.markers);
+              this.mymap.setView([response.data[0].latitude, response.data[0].longitude])
           });
         },
 },

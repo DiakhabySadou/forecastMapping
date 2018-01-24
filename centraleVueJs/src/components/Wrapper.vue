@@ -29,6 +29,7 @@
                     </li>
 
                     <li>
+                      <button v-on:click="getAllSonds" type="button" class="btn btn-info navbar-btn" style="margin-top:30%">All Sonds</button>
                         <p style="background-color:green">SONDE SELECTIONNEE</p>
                         <a style="font-size:bold" href="#">{{sonde}}</a>
                     </li>
@@ -54,7 +55,7 @@
                     </div>
                 </nav>
                 <br><br><br><br>
-                  <button v-on:click="getAllSonds" type="button" class="btn btn-info navbar-btn" style="margin-top:30%">All Sonds</button>
+
           </div>
 
       <div style="display:inline;" class="col-md-9">
@@ -75,7 +76,7 @@ import myMap from '../components/myMap'
 
   data: function() {
   return {
-    url: "http://localhost:3000",
+    url: "http://172.31.43.65:3000",
      week_clicked: false,
      container_clicked: true,
      hide: false,
@@ -98,7 +99,7 @@ import myMap from '../components/myMap'
   methods: {
        sonde1: function(){
            this.sonde="sonde 1"
-          this.url="http://localhost:3000"
+          this.url="http://172.31.43.65:3000"
       },
       sonde2: function(){
            this.sonde="sonde 2"
@@ -114,19 +115,19 @@ import myMap from '../components/myMap'
        sonde4: function(){
                      this.sonde="sonde 4"
 
-          this.url="http://localhost:3004"
+          this.url="http://172.31.43.65:3004"
 
       },
        sonde5: function(){
                       this.sonde="sonde 5"
 
-          this.url="http://localhost:3005"
+          this.url="http://172.31.43.65:3005"
 
       },
        sonde6: function(){
                       this.sonde="sonde 6"
 
-          this.url="http://localhost:3006"
+          this.url="http://172.31.43.65:3006"
 
       },
       getAllSonds:function()
