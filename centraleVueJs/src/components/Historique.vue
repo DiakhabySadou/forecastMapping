@@ -48,7 +48,6 @@ export default {
                 var today = new Date();
                 var week = new Date();
                 week.setDate(today.getDate()-7);
-                //this.datas={};
                 this.getchart(today,week,10)
               }
               else if(this.histo.month)

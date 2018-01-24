@@ -8,7 +8,7 @@
 
                 <ul class="list-unstyled components">
 
-                    <li class="active" v-on:click="switchContainer" >
+                    <li class="active" >
                         <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Sondes</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
                             <li><a href="#" v-on:click="sonde1">Sonde 1</a></li>
@@ -16,7 +16,6 @@
                             <li><a href="#" v-on:click="sonde3">Sonde 3</a></li>
                             <li><a href="#" v-on:click="sonde4">Sonde 4</a></li>
                             <li><a href="#" v-on:click="sonde5">Sonde 5</a></li>
-                            <li><a href="#" v-on:click="sonde6">Sonde 6</a></li>
                         </ul>
                     </li>
                     <li>
@@ -27,11 +26,8 @@
                             <li><a href="#" v-on:click="year_click">1 an</a></li>
                         </ul>
                     </li>
-
                     <li>
-                      <button v-on:click="getAllSonds" type="button" class="btn btn-info navbar-btn" style="margin-top:30%">All Sonds</button>
-                        <p style="background-color:green">SONDE SELECTIONNEE</p>
-                        <a style="font-size:bold" href="#">{{sonde}}</a>
+                      <button v-on:click="getAllSonds" type="button" class="btn btn-info navbar-btn" style="margin-top:30%">Toutes les sondes</button>
                     </li>
                 </ul>
 
@@ -59,9 +55,14 @@
           </div>
 
       <div style="display:inline;" class="col-md-9">
-            <myMap :url="url"></myMap>
+        <nav class="navbar navbar-inverse bg-default" style="text-align:center">
+          <h1>{{sonde}}</h1></nav>
+        <myMap :url="url" :sonde="sonde" :tabLocation="tabSync"></myMap>
         <container :url="url" :hide="hide" />
         <Historique :url="url" :hideHist="hideHist" :histo="histo" />
+        
+        <Comparative v-if="allSonds" :tabLocation.sync="tabSync"></Comparative>
+
       </div>
 
      </div>
@@ -71,18 +72,20 @@
 import Container from '../components/Container'
 import Historique from '../components/Historique'
 import myMap from '../components/myMap'
+import Comparative from '../components/Comparative'
     export default {
   name: 'Wrapper',
-
+  props:['tabLocation'],
   data: function() {
   return {
     url: "http://172.31.43.65:3000",
      week_clicked: false,
      container_clicked: true,
      hide: false,
-     sonde:"sonde 1",
+     sonde:"Sonde 1",
      hideHist: true,
-
+     allSonds:false,
+     tabSync:[],
      histo: {
         week: false,
         month:false,
@@ -93,46 +96,42 @@ import myMap from '../components/myMap'
  }
   },
   created: function(){
-
-
   },
   methods: {
        sonde1: function(){
-           this.sonde="sonde 1"
-          this.url="http://172.31.43.65:3000"
+           this.tabSync = [];this.sonde="Sonde 1"
+           this.url="http://172.31.43.65:3000"
+            this.switchContainer();
       },
       sonde2: function(){
-           this.sonde="sonde 2"
-
+           this.tabSync = [];this.sonde="Sonde 2"
+           this.switchContainer();
           this.url="http://172.31.43.58:3000"
 
       },
        sonde3: function(){
-                      this.sonde="sonde 3"
-
-          this.url="http://172.31.43.61:3000"
+                      this.tabSync = [];this.sonde="Sonde 3"
+                      this.switchContainer();
+          this.url="http://172.31.43.60:3000"
       },
        sonde4: function(){
-                     this.sonde="sonde 4"
-
-          this.url="http://172.31.43.65:3004"
+                     this.tabSync = [];this.sonde="Sonde 4"
+                     this.switchContainer();
+          this.url="http://172.31.43.61:3000"
 
       },
        sonde5: function(){
-                      this.sonde="sonde 5"
-
-          this.url="http://172.31.43.65:3005"
-
-      },
-       sonde6: function(){
-                      this.sonde="sonde 6"
-
-          this.url="http://172.31.43.65:3006"
+                      this.tabSync = [];this.sonde="Sonde 5"
+                      this.switchContainer();
+          this.url="http://172.31.43.62:3000"
 
       },
+
       getAllSonds:function()
       {
-
+          this.allSonds=true;
+          this.hideHist= true;
+          this.hide=true;
       },
       week_click: function(){
         this.hideHist= false;
@@ -140,6 +139,8 @@ import myMap from '../components/myMap'
         this.histo.year=false;
         this.histo.month=false;
         this.hide=true;
+        this.allSonds=false;
+
       },
       month_click(){
         this.hideHist= false;
@@ -147,6 +148,7 @@ import myMap from '../components/myMap'
         this.histo.week=false;
         this.histo.year=false;
         this.histo.month=true;
+        this.allSonds=false;
       },
        year_click(){
         this.hideHist= false;
@@ -154,27 +156,22 @@ import myMap from '../components/myMap'
         this.histo.week=false;
         this.histo.year=true;
         this.histo.month=false;
+        this.allSonds=false;
       },
       switchContainer: function () {
          this.hideHist=true;
           this.hide=false;
-        this.$emit("hideHist", this.hide)
-        this.$emit("hide", this.hide)
-      },
-      updateUrl: function(){
-    console.log(this.url)
+          this.allSonds=false;
 
-    return {
-        url: this.url
-    }
-    }
+      },
 
   },
 
    components: {
        Container,
        Historique,
-       myMap
+       myMap,
+       Comparative
    }
 
 }

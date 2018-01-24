@@ -7,3 +7,9 @@ Chaque sonde est relié à plusieurs capteurs qui donnent des informations diver
 -Pluviométrie 
 -Luminosité 
 -Vitesse et direction du vent Position GPS et heure ...
+
+Réalisé par :
+# OUHABI Adel
+# DIAKHABY Thierno Sadou
+
+ENSG TSI 2017

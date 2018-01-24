@@ -84,7 +84,7 @@ export default {
          console.log(lab);
 
        var myChart = new Chart(ctx, {
-         type: 'bar',
+         type: 'line',
          data: {
         labels: lab,
         datasets: [{
