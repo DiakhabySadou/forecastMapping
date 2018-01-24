@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-10">
+  <div style="z-index:2000" class="col-md-10">
      <div id="mapid"></div>
      {{fetchItems()}}
    </div>
@@ -18,15 +18,14 @@ export default {
      ,
      mounted:function()
      {
-
-       this.mymap=L.map('mapid').setView([51.505, -0.09], 13)
+       this.mymap=L.map('mapid').setView([51.505, -0.09], 8)
        L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoic2Fkb3UiLCJhIjoiY2lvZXc0bXFkMDAzbHc0ajdxNHZmY3g1MiJ9.Ct7zHhmOLwKhD8b9mvyHJg', {
          attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
          maxZoom: 8,
          id: 'mapbox.streets',
          accessToken: 'pk.eyJ1Ijoic2Fkb3UiLCJhIjoiY2lvZXc0bXFkMDAzbHc0ajdxNHZmY3g1MiJ9.Ct7zHhmOLwKhD8b9mvyHJg'
        }).addTo(this.mymap);
-        this.markers= L.markerClusterGroup();
+         this.markers = L.layerGroup().addTo(this.mymap);
      },
 created: function()
     {
@@ -41,10 +40,8 @@ methods: {
         {
               // initUri()
               this.axios.get(this.url+"/last/location").then((response) => {
-              var marker = L.marker([response.data[0].longitude, response.data[0].latitude]);
-              this.markers.addLayer(marker);
-              this.mymap.addLayer(markers);
-
+              L.marker([response.data[0].longitude, response.data[0].latitude]).addTo(this.markers);
+              this.mymap.setView([response.data[0].longitude, response.data[0].latitude])
           });
         },
 },

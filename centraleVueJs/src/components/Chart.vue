@@ -23,37 +23,37 @@ export default {
 
        this.fetctItems();
    },
-   updated : function()  
+   updated : function()
    {
-     
 
-     
+
+
      var ctx = this.$refs.temperature.getContext('2d');
-     ctx.clearRect(0,0,500,200);
-     
-     this.drawCanvas(ctx,this.groupByDate(this.datas.temperature)[0],this.groupByDate(this.datas.temperature)[1]);
+     //ctx.clearRect(0,0,500,200);
+
+     this.drawCanvas(ctx,this.groupByDate(this.datas.temperature)[0],this.groupByDate(this.datas.temperature)[1],"Température");
 
      var ctxpressure = this.$refs.pressure.getContext('2d');
-     this.drawCanvas(ctxpressure,this.groupByDate(this.datas.pressure)[0],this.groupByDate(this.datas.pressure)[1]);
+     this.drawCanvas(ctxpressure,this.groupByDate(this.datas.pressure)[0],this.groupByDate(this.datas.pressure)[1],"Pression");
 
 
      var ctxhumidity = this.$refs.humidity.getContext('2d');
-     this.drawCanvas(ctxhumidity,this.groupByDate(this.datas.humidity)[0],this.groupByDate(this.datas.humidity)[1]);
-  
+     this.drawCanvas(ctxhumidity,this.groupByDate(this.datas.humidity)[0],this.groupByDate(this.datas.humidity)[1],"Humidité");
+
      var ctxluminosity = this.$refs.luminosity.getContext('2d');
-     this.drawCanvas(ctxluminosity,this.groupByDate(this.datas.luminosity)[0],this.groupByDate(this.datas.luminosity)[1]);
-  
+     this.drawCanvas(ctxluminosity,this.groupByDate(this.datas.luminosity)[0],this.groupByDate(this.datas.luminosity)[1],"Luminosité");
+
      var ctxwind_speed_avg = this.$refs.wind_speed_avg.getContext('2d');
-     this.drawCanvas(ctxwind_speed_avg,this.groupByDate(this.datas.wind_speed_avg)[0],this.groupByDate(this.datas.wind_speed_avg)[1]);
-  
-   
+     this.drawCanvas(ctxwind_speed_avg,this.groupByDate(this.datas.wind_speed_avg)[0],this.groupByDate(this.datas.wind_speed_avg)[1],"Moyenne du vent");
+
+
    },
    methods:
    {
      fetctItems()
      {
          console.log(this.datas);
-         
+
      },
      groupByDate(object)
      {
@@ -79,16 +79,16 @@ export default {
           });
       return [labels,values];
      },
-     drawCanvas(ctx,lab,dat)
+     drawCanvas(ctx,lab,dat,name)
      {
          console.log(lab);
-         
+
        var myChart = new Chart(ctx, {
          type: 'bar',
          data: {
         labels: lab,
         datasets: [{
-            label: '# of Votes',
+            label: name,
             data: dat,
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',

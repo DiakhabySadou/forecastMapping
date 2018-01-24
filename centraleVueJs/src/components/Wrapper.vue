@@ -3,7 +3,7 @@
             <!-- Sidebar Holder -->
             <nav id="sidebar" class="col-md-2">
                 <div class="sidebar-header">
-                    <h3>Centrale Sidebar</h3>
+                    <h3>Forecast Mapping</h3>
                 </div>
 
                 <ul class="list-unstyled components">
@@ -29,7 +29,8 @@
                     </li>
 
                     <li>
-                        <a href="#">{{sonde}}</a>
+                        <p style="background-color:green">SONDE SELECTIONNEE</p>
+                        <a style="font-size:bold" href="#">{{sonde}}</a>
                     </li>
                 </ul>
 
@@ -52,13 +53,14 @@
 
                     </div>
                 </nav>
+                <br><br><br><br>
+                  <button v-on:click="getAllSonds" type="button" class="btn btn-info navbar-btn" style="margin-top:30%">All Sonds</button>
           </div>
 
       <div style="display:inline;" class="col-md-9">
+            <myMap :url="url"></myMap>
         <container :url="url" :hide="hide" />
-        <Historique :url="url"   :hideHist="hideHist" :histo="histo" />
-        <myMap :url="url"></myMap>
-
+        <Historique :url="url" :hideHist="hideHist" :histo="histo" />
       </div>
 
      </div>
@@ -73,7 +75,7 @@ import myMap from '../components/myMap'
 
   data: function() {
   return {
-    url: "http://172.31.43.65:3000",
+    url: "http://localhost:3000",
      week_clicked: false,
      container_clicked: true,
      hide: false,
@@ -96,7 +98,7 @@ import myMap from '../components/myMap'
   methods: {
        sonde1: function(){
            this.sonde="sonde 1"
-          this.url="http://172.31.43.65:3000"
+          this.url="http://localhost:3000"
       },
       sonde2: function(){
            this.sonde="sonde 2"
@@ -127,16 +129,16 @@ import myMap from '../components/myMap'
           this.url="http://localhost:3006"
 
       },
+      getAllSonds:function()
+      {
+
+      },
       week_click: function(){
         this.hideHist= false;
         this.histo.week=true;
         this.histo.year=false;
         this.histo.month=false;
         this.hide=true;
-
-
-
-
       },
       month_click(){
         this.hideHist= false;
